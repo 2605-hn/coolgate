@@ -14,6 +14,7 @@ let renderer, scene, camera, controls, room, flashlight, ghost, ghostLight, smok
 let started = false, ended = false, flashlightOn = true, audio = null, puzzleSolved = false, puzzleOpen = false;
 let messageUntil = 0, lastTime = performance.now(), elapsed = 0, collected = new Set();
 let storyBeat = 0, storyBeatUntil = 0;
+let crouching = false, lowStaminaWarned = false;
 let ghostState = 'dormant', stateTime = 0, chaseTime = 0, noise = 0, noiseCooldown = 0;
 let lastNoise = new THREE.Vector3(SPAWN.x, 0, SPAWN.z), nextKnock = 11, footstepClock = 0;
 const ghostPos = { x: 7.7, z: -3.1 };
@@ -372,11 +373,11 @@ function updateGhost(dt,now) {
       const speed=.48+Math.min(.35,collected.size*.12);
       moveWithCollision(ghostPos,dx/d*speed*dt,dz/d*speed*dt,.25,room.colliders);
     }
-    if(noise>.65 && noiseCooldown<=0) {
+    if(noise>(controls.isCrouching?.92:.65) && noiseCooldown<=0) {
       ghostState='investigate';stateTime=0;noiseCooldown=4;
       say('Tiếng động đã khiến nó chú ý đến mày…',2300); tone(50,.5,'sawtooth',.12);
     }
-    if(d<5.5 && collected.size>=2) { ghostState='chase';stateTime=0;chaseTime=0;say('NÓ ĐÃ THẤY MÀY! CHẠY!',2200); }
+    if(d<(controls.isCrouching?4.2:5.5) && collected.size>=2) { ghostState='chase';stateTime=0;chaseTime=0;say('NÓ ĐÃ THẤY MÀY! CHẠY!',2200); }
     // A brief apparition in a different part of the house, only while off-screen.
     if(stateTime>8 && d>6 && !facingGhost()) {
       const spots=storyStalkSpots.length?storyStalkSpots:stalkSpots; const spot=spots[Math.floor(Math.random()*spots.length)];
@@ -437,6 +438,7 @@ function init() {
     if(e.repeat||!controls.locked||ended)return;
     if(e.code==='KeyF'){flashlightOn=!flashlightOn;flashlight.visible=flashlightOn;say(flashlightOn?'Đèn pin bật.':'Đèn pin tắt.',900);tone(flashlightOn?300:160,.07,'square',.04);}
     if(e.code==='KeyE')investigate();
+    if(e.code==='KeyC'){crouching=!crouching;controls.isCrouching=crouching;say(crouching?'Mày cúi thấp người, cố nín thở.':'Mày đứng thẳng dậy.',1100);tone(crouching?105:145,.06,'triangle',.035);}
   });
   window.addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();});
   renderer.setSize(innerWidth,innerHeight,false);
@@ -446,15 +448,21 @@ function init() {
       controls.update(dt);
       // Footsteps must be audible from the very beginning, even before the ghost wakes up.
       const moveSpeed=Math.hypot(controls.velocity.x,controls.velocity.z);
-      const running=controls.keys.has('ShiftLeft')||controls.keys.has('ShiftRight');
+      const running=controls.isRunning;
+      const staminaFill=$('staminaFill'), stance=$('stance');
+      if(staminaFill)staminaFill.style.width=controls.stamina.toFixed(1)+'%';
+      if(stance)stance.textContent=crouching?'ĐANG CÚI · ÍT GÂY TIẾNG ỒN':(controls.stamina<1?'HẾT THỂ LỰC':(running?'ĐANG CHẠY':'ĐỨNG'));
+      if(staminaFill)staminaFill.style.background=controls.stamina<25?'#a85c4d':'#b69a62';
+      if(controls.stamina<1&&!lowStaminaWarned){lowStaminaWarned=true;say('Mày đã kiệt sức. Đi bộ một lúc để hồi thể lực.',2200);}
+      if(controls.stamina>35)lowStaminaWarned=false;
       if(moveSpeed>.48) {
         footstepClock+=dt;
-        const interval=running?.34:.52;
+        const interval=crouching?.82:(running?.34:.52);
         if(footstepClock>=interval) {
           footstepClock=0; stepSound(running);
-          if(ghostState!=='dormant')makeNoise(running?.95:.28,controls.position);
+          if(ghostState!=='dormant')makeNoise(crouching?.08:(running?.95:.28),controls.position);
           // Occasional quiet board creak sells the old wooden house without constant noise.
-          if(Math.random()<(running?.08:.12))woodCreak();
+          if(Math.random()<(crouching?.015:(running?.08:.12)))woodCreak();
         }
       } else footstepClock=0;
       if(message.style.display!=='none'&&now>messageUntil)message.style.display='none';

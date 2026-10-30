@@ -20,6 +20,9 @@ export class FirstPersonControls {
     this.radius = opts.radius ?? 0.28;
     this.walkSpeed = opts.walkSpeed ?? 2.4;   // m/s
     this.runSpeed = opts.runSpeed ?? 4.0;
+    this.stamina = 100;
+    this.isRunning = false;
+    this.isCrouching = false;
     this.sensitivity = opts.sensitivity ?? 0.0022;
 
     this.position = { x: spawn.x, z: spawn.z };
@@ -126,7 +129,11 @@ export class FirstPersonControls {
     const len = Math.hypot(forward, strafe);
     if (len > 0) { forward /= len; strafe /= len; }
 
-    const speed = k.has("ShiftLeft") || k.has("ShiftRight") ? this.runSpeed : this.walkSpeed;
+    const wantsRun = (k.has("ShiftLeft") || k.has("ShiftRight")) && !this.isCrouching && len > 0.05 && this.stamina > 0;
+    this.isRunning = wantsRun;
+    if (wantsRun) this.stamina = Math.max(0, this.stamina - 25 * dt);
+    else this.stamina = Math.min(100, this.stamina + (this.isCrouching ? 22 : 15) * dt);
+    const speed = this.isCrouching ? this.walkSpeed * 0.48 : (wantsRun ? this.runSpeed : this.walkSpeed);
 
     // Hướng nhìn trên mặt phẳng XZ. yaw = 0 nhìn về -Z.
     const sin = Math.sin(this.yaw), cos = Math.cos(this.yaw);

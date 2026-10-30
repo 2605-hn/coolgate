@@ -12,13 +12,14 @@
     <div id="crosshair"></div>
     <div id="hint">WASD di chuyển · Chuột nhìn · Shift chạy · F đèn pin · E điều tra · Esc tạm dừng</div>
     <div id="objective">Tìm 3 manh mối trong căn nhà.</div><div id="clues">Manh mối: 0 / 3</div>
+    <div id="stamina"><span>THỂ LỰC</span><div class="meter"><i id="staminaFill"></i></div><b id="stance">ĐỨNG</b></div>
     <div id="prompt"></div><div id="message" role="status"></div>
   </div>
   <div id="overlay"><div class="panel">
     <h1>ĐÊM Ở VẠN ĐÒ</h1><p class="tag">Kinh dị sinh tồn · Góc nhìn thứ nhất</p>
     <p id="overlayText">Căn nhà từ đường đã bị bỏ hoang. Tìm ba manh mối, nhưng đừng để thứ đang ở trong bóng tối bắt được mày.</p>
     <button id="startBtn" type="button" disabled>Đang tải cảnh 3D…</button><p id="overlayMsg" role="status"></p>
-    <ul class="keys"><li><kbd>W A S D</kbd> di chuyển</li><li><kbd>Chuột</kbd> nhìn xung quanh</li><li><kbd>Shift</kbd> chạy nhanh (ồn hơn)</li><li><kbd>F</kbd> bật/tắt đèn pin</li><li><kbd>E</kbd> điều tra manh mối</li><li><kbd>Esc</kbd> tạm dừng</li></ul>
+    <ul class="keys"><li><kbd>W A S D</kbd> di chuyển</li><li><kbd>Chuột</kbd> nhìn xung quanh</li><li><kbd>Shift</kbd> chạy nhanh (tốn thể lực, gây tiếng động)</li><li><kbd>C</kbd> cúi người: di chuyển chậm và khó bị phát hiện hơn</li><li><kbd>F</kbd> bật/tắt đèn pin</li><li><kbd>E</kbd> điều tra manh mối</li><li><kbd>Esc</kbd> tạm dừng</li></ul>
     <a class="back" href="/">← Quay lại bản 2D</a>
   </div></div>
   <div id="puzzle" hidden role="dialog" aria-modal="true" aria-labelledby="puzzleTitle">

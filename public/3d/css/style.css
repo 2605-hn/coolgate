@@ -83,3 +83,10 @@ body::after {
 #puzzleFeedback { min-height: 24px; margin: 8px 0; color:#e9a38b; font-size:14px; }
 .puzzle-actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
 button.secondary { background:#242a27; border-color:#55594d; }
+
+/* V8.3 — thể lực và trạng thái ẩn nấp */
+#stamina { position:absolute; left:16px; top:76px; width:190px; padding:8px 10px; border:1px solid rgba(185,152,95,.32); border-radius:5px; background:rgba(0,0,0,.52); color:#d9cfb8; font-size:10px; letter-spacing:1px; display:grid; grid-template-columns:auto 1fr; align-items:center; gap:7px 9px; }
+#stamina .meter {height:7px; overflow:hidden; border-radius:8px; background:#292720;}
+#staminaFill {display:block; width:100%; height:100%; background:#b69a62; transition:width .12s linear;}
+#stance {grid-column:1/-1; color:#a99d82; font-size:10px; font-weight:500;}
+@media (max-width:600px) { #stamina {left:8px; top:65px; width:150px;} }
