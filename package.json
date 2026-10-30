@@ -1,0 +1,15 @@
+{
+  "name": "dem-hien-truong",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Game kinh dị Việt Nam Đêm Ở Vạn Đò — bản 2D gốc và prototype 3D",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "socket.io": "^4.8.1",
+    "three": "^0.186.1"
+  }
+}

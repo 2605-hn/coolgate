@@ -1,0 +1,85 @@
+/* File: public/3d/css/style.css */
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: #050607; }
+body { color: #e7dfca; font: 16px system-ui, sans-serif; }
+
+#scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; outline: none; }
+
+/* HUD */
+#hud { position: fixed; inset: 0; pointer-events: none; }
+#hud[hidden] { display: none; }
+#crosshair {
+  position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px;
+  border-radius: 50%; background: rgba(240, 225, 190, 0.7);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+}
+#hint {
+  position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%);
+  padding: 6px 14px; border-radius: 6px; font-size: 13px; color: #cfc6ad;
+  background: rgba(0, 0, 0, 0.45); white-space: nowrap;
+}
+#debug {
+  position: absolute; left: 10px; top: 10px; padding: 6px 10px; border-radius: 6px;
+  font: 12px ui-monospace, Consolas, monospace; color: #9fe0a8; background: rgba(0, 0, 0, 0.55);
+}
+
+/* Overlay bắt đầu / tạm dừng */
+#overlay {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: rgba(4, 6, 6, 0.72); z-index: 10; padding: 16px;
+}
+#overlay.hidden { display: none; }
+.panel {
+  width: min(94%, 460px); padding: 28px 26px; text-align: center;
+  background: rgba(14, 18, 17, 0.92); border: 1px solid #4b4533; border-radius: 10px;
+}
+h1 { margin: 0 0 4px; letter-spacing: 4px; color: #d8b780; font-size: 26px; }
+.tag { margin: 0 0 16px; color: #8f8b7d; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; }
+.panel p { color: #b8b5a9; line-height: 1.55; }
+button {
+  padding: 12px 28px; border-radius: 6px; border: 1px solid #7a6340;
+  background: #58402b; color: #fff; font-size: 16px; cursor: pointer;
+}
+button:hover:not(:disabled) { background: #785638; }
+button:disabled { opacity: 0.6; cursor: default; }
+button:focus-visible, a:focus-visible { outline: 2px solid #d8b780; outline-offset: 2px; }
+#overlayMsg { min-height: 22px; margin: 10px 0 0; font-size: 14px; color: #e9a38b; }
+.keys { list-style: none; padding: 0; margin: 14px 0 6px; font-size: 14px; color: #b8b5a9; line-height: 2; }
+kbd {
+  display: inline-block; min-width: 24px; margin: 0 2px; padding: 0 6px; border-radius: 4px;
+  border: 1px solid #645b47; background: #1b211f; color: #f0e7cf; font: 12px ui-monospace, Consolas, monospace;
+}
+.back { display: inline-block; margin-top: 8px; color: #b9985f; font-size: 14px; }
+
+@media (max-width: 600px) {
+  #hint { white-space: normal; width: 92%; text-align: center; }
+}
+
+/* Gameplay HUD */
+#objective, #clues { position: absolute; top: 18px; padding: 9px 12px; border: 1px solid rgba(185,152,95,.35); border-radius: 5px; background: rgba(0,0,0,.52); color: #e2d4b5; font-size: 13px; }
+#objective { left: 16px; max-width: min(340px, 55vw); }
+#clues { right: 16px; }
+#prompt { position: absolute; left: 50%; top: calc(50% + 24px); transform: translateX(-50%); color: #f0d7a3; text-shadow: 0 2px 4px #000; font-size: 14px; }
+#message { display: none; position: absolute; left: 50%; top: 16%; transform: translateX(-50%); width: min(88%, 620px); padding: 14px 18px; border: 1px solid rgba(185,152,95,.5); border-radius: 6px; background: rgba(5,6,5,.82); color: #e8ddc6; text-align: center; line-height: 1.5; }
+#ending { position: fixed; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(0,0,0,.82); }
+#ending .panel { width: min(94%, 480px); }
+@media (max-width: 600px) { #objective { left: 8px; top: 8px; } #clues { right: 8px; top: auto; bottom: 56px; } #message { top: 20%; } }
+
+/* Lớp vignette nhẹ để gom ánh nhìn vào vùng đèn pin, không chặn thao tác. */
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: 2; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 32%, rgba(0,0,0,.20) 72%, rgba(0,0,0,.48) 100%);
+}
+#hud { z-index: 3; }
+#message { box-shadow: 0 8px 32px rgba(0,0,0,.38); backdrop-filter: blur(3px); }
+#objective, #clues { box-shadow: 0 4px 18px rgba(0,0,0,.24); backdrop-filter: blur(3px); }
+
+/* Suy luận cuối chương */
+#puzzle { position: fixed; inset: 0; z-index: 16; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(0,0,0,.84); }
+#puzzle[hidden] { display: none; }
+.puzzle-panel { width: min(94%, 480px); }
+.puzzle-panel label { display:block; margin: 12px 0 7px; color:#d8c9a8; font-size:14px; }
+#puzzleCode { width: 100%; padding: 12px; border: 1px solid #756343; border-radius: 6px; background:#080b0a; color:#f3e4c2; text-align:center; font: 24px ui-monospace,Consolas,monospace; letter-spacing: 8px; }
+#puzzleFeedback { min-height: 24px; margin: 8px 0; color:#e9a38b; font-size:14px; }
+.puzzle-actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+button.secondary { background:#242a27; border-color:#55594d; }

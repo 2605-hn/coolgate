@@ -1,0 +1,64 @@
+
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Đêm Ở Vạn Đò</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: #090d0d; color: #e7dfca;
+      font: 16px system-ui, sans-serif; text-align: center;
+    }
+    main { width: min(94%, 820px); margin: 24px auto; }
+    h1 { letter-spacing: 4px; color: #d8b780; }
+    p { color: #b8b5a9; }
+    input, button {
+      padding: 11px; margin: 4px; border-radius: 6px;
+      border: 1px solid #645b47; background: #171c1b;
+      color: #fff; font-size: 15px;
+    }
+    button { cursor: pointer; background: #58402b; }
+    button:hover { background: #785638; }
+    #menu { padding: 20px; border: 1px solid #393b32; }
+    #game { display: none; width: 100%; }
+    canvas {
+      width: 100%; height: auto; display: block;
+      border: 2px solid #60543c; background: #111914;
+      image-rendering: pixelated;
+    }
+    #status { min-height: 26px; }
+    .hint { font-size: 13px; line-height: 1.8; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>ĐÊM Ở VẠN ĐÒ</h1>
+  <p>Một vụ mất tích. Ba manh mối. Đừng để ngọn đèn tắt.</p>
+
+  <section id="menu">
+    <p>Nhập tên và mã phòng nếu muốn chơi cùng bạn bè.</p>
+    <input id="name" maxlength="18" placeholder="Tên của mày">
+    <input id="room" maxlength="12" placeholder="Mã phòng, ví dụ LANG01">
+    <br>
+    <button id="solo">Chơi đơn</button>
+    <button id="online">Chơi online</button>
+    <p id="menuStatus"></p>
+  </section>
+
+  <section id="game">
+    <p id="status">Đêm đầu tiên bắt đầu...</p>
+    <canvas id="world" width="800" height="600"></canvas>
+    <p class="hint">
+      WASD / phím mũi tên: di chuyển · E: điều tra ·
+      Tìm ba manh mối và tránh bóng đen.
+    </p>
+    <button id="back">Về menu</button>
+  </section>
+</main>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
